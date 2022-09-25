@@ -26,8 +26,9 @@ public class Ball : MonoBehaviour
 
         Vector2 v = new Vector2(inputX * moveSpeed, rigid.velocity.y);
 
-        if (isGround && !isGlue && Input.GetKey(KeyCode.Space)) {
+        if (((isGround && !isGlue) || isWater) && Input.GetKey(KeyCode.Space)) {
             isGround = false;
+            isGlue = false;
             v.y = jumpSpeed;
         }
 
@@ -56,6 +57,8 @@ public class Ball : MonoBehaviour
 
     private bool isGround = false; 
     private bool isGlue = false; 
+    private bool isWater = false; 
+
     void OnCollisionStay2D(Collision2D collision) {
         if (collision.gameObject.layer== 7) {
             // layer number 7 is spike.
@@ -74,11 +77,17 @@ public class Ball : MonoBehaviour
         }
     }
 
-    void OnTriggerStay2D(Collider2D collider) {
+    void OnTriggerEnter2D(Collider2D collider) {
         if (collider.gameObject.layer == 9) {
             // layer number 9 is water.
-            isGround = true;
-            isGlue = false;
+            isWater = true;
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D collider) {
+        if (collider.gameObject.layer == 9) {
+            // layer number 9 is water.
+            isWater = false;
         }
     }
 
@@ -86,6 +95,8 @@ public class Ball : MonoBehaviour
         rigid.velocity = new Vector2(0, 0);
         this.transform.position = new Vector2(0, 0);
         isGround = false;
+        isGlue = false;
+        isWater = false;
     }
 
 }
