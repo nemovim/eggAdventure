@@ -23,9 +23,12 @@ public class HidedBlock : MonoBehaviour
     }
 
     private float nowTime = 0;
+    // -1 => don't show
     void Show() {
-        render.enabled = true;
-        nowTime = reTime;
+        if (nowTime != -1) {
+            render.enabled = true;
+            nowTime = reTime;
+        }
     }
 
     void Hide() {

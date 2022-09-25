@@ -26,7 +26,7 @@ public class Ball : MonoBehaviour
 
         Vector2 v = new Vector2(inputX * moveSpeed, rigid.velocity.y);
 
-        if (isGround && Input.GetKey(KeyCode.Space)) {
+        if (isGround && !isGlue && Input.GetKey(KeyCode.Space)) {
             isGround = false;
             v.y = jumpSpeed;
         }
@@ -55,26 +55,30 @@ public class Ball : MonoBehaviour
     // }
 
     private bool isGround = false; 
-    void OnCollisionEnter2D(Collision2D collision) {
+    private bool isGlue = false; 
+    void OnCollisionStay2D(Collision2D collision) {
         if (collision.gameObject.layer== 7) {
-            // layer number 7 is obstacle.
+            // layer number 7 is spike.
             Restart();
-        } else if (collision.gameObject.layer == 6) {
-            isGround = true;
-        } else if (collision.gameObject.layer == 8) {
-            isGround = false;
         }
-    }
 
-    void OnCollisionExit2D(Collision2D collision) {
-        if (collision.gameObject.layer == 8) {
+        if (collision.gameObject.layer == 6) {
+            // layer number 6 is ground.
             isGround = true;
+            isGlue = false;
+        }
+
+        if (collision.gameObject.layer == 8) {
+            // layer number 8 is glue.
+            isGlue = true;
         }
     }
 
     void OnTriggerStay2D(Collider2D collider) {
         if (collider.gameObject.layer == 9) {
+            // layer number 9 is water.
             isGround = true;
+            isGlue = false;
         }
     }
 
