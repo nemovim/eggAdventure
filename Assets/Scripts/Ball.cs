@@ -14,8 +14,15 @@ public class Ball : MonoBehaviour
     void FixedUpdate()
     {
         PlayerMove();
+        CheckHeight();
     }
 
+    public float minHeight = -100;
+    void CheckHeight() {
+        if (transform.position.y < minHeight) {
+            Die();
+        }
+    }
     public int moveSpeed = 7;
     public int jumpSpeed = 15;
     public int minSpeed = -15;
@@ -89,6 +96,10 @@ public class Ball : MonoBehaviour
             // layer number 9 is water.
             isWater = false;
         }
+    }
+
+    void Die() {
+        Restart();
     }
 
     void Restart() {

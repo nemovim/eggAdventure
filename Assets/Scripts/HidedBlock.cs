@@ -22,12 +22,19 @@ public class HidedBlock : MonoBehaviour
         Show();
     }
 
+    void OnTriggerExit2D(Collider2D collider) {
+        nowTime = reTime;
+    }
+
+    void OnCollisionExit2D(Collision2D collision) {
+        nowTime = reTime;
+    }
+
     private float nowTime = 0;
     // -1 => don't show
     void Show() {
         if (nowTime != -1) {
             render.enabled = true;
-            nowTime = reTime;
         }
     }
 

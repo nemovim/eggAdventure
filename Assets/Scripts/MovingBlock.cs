@@ -4,43 +4,37 @@ using UnityEngine;
 
 public class MovingBlock : MonoBehaviour
 {
-    private Rigidbody2D rigid;
+    private Vector2 initialPos;
     void Awake()
     {
-        rigid = this.GetComponent<Rigidbody2D>();
+        initialPos = transform.position;
     }
 
     public float verticalSpeed = 0;
-    private int verticalLength = 0;
     public int maxVerticalLength = 0;
     public float horizontalSpeed = 0;
     public int maxHorizontalLength = 0;
-    private int horizontalLength = 0;
-
-    void Start() {
-        SetVelocity();
-    }
 
     void FixedUpdate()
     {
-        if (verticalSpeed != 0 && verticalLength < maxVerticalLength) {
-            verticalLength += 1;
-        } else if (verticalLength == maxVerticalLength) {
-            verticalLength = 0;
+        transform.Translate(new Vector2(horizontalSpeed*0.01f, verticalSpeed*0.01f));
+
+        if (verticalSpeed != 0 && Mathf.Round(Mathf.Abs(initialPos.y - transform.position.y)*100) >= maxVerticalLength*100) {
+            if (verticalSpeed > 0) {
+                initialPos = new Vector2(initialPos.x, initialPos.y + maxVerticalLength);
+            } else {
+                initialPos = new Vector2(initialPos.x, initialPos.y - maxVerticalLength);
+            }
             verticalSpeed *= -1;
-            SetVelocity();
         }
         
-        if (horizontalSpeed != 0 && horizontalLength < maxHorizontalLength) {
-            horizontalLength += 1;
-        } else if (horizontalLength == maxHorizontalLength) {
-            horizontalLength = 0;
+        if (horizontalSpeed != 0 && Mathf.Round(Mathf.Abs(initialPos.x - transform.position.x)*100) >= maxHorizontalLength*100) {
+            if (horizontalSpeed > 0) {
+                initialPos = new Vector2(initialPos.x + maxHorizontalLength, initialPos.y);
+            } else {
+                initialPos = new Vector2(initialPos.x - maxHorizontalLength, initialPos.y);
+            }
             horizontalSpeed *= -1;
-            SetVelocity();
         }
-    }
-
-    void SetVelocity() {
-        rigid.velocity = new Vector2(horizontalSpeed, verticalSpeed);
     }
 }
