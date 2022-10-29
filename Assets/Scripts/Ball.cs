@@ -15,6 +15,10 @@ public class Ball : MonoBehaviour
     {
         PlayerMove();
         CheckHeight();
+
+        if (Input.GetKey(KeyCode.UpArrow)) {
+            Die();
+        }
     }
 
     public float minHeight = -100;

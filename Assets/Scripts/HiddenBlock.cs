@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HidedBlock : MonoBehaviour
+public class HiddenBlock : MonoBehaviour
 {
     private SpriteRenderer render;
     public float reTime = 0;
