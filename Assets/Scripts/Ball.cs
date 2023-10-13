@@ -11,6 +11,10 @@ public class Ball : MonoBehaviour
         rigid = this.GetComponent<Rigidbody2D>();
     }
 
+    void Update() {
+        PlayerJump();
+    }
+
     void FixedUpdate()
     {
         PlayerMove();
@@ -37,22 +41,31 @@ public class Ball : MonoBehaviour
 
         Vector2 v = new Vector2(inputX * moveSpeed, rigid.velocity.y);
 
-        if (((isGround && !isGlue) || isWater) && Input.GetKey(KeyCode.Space)) {
-            isGround = false;
-            isGlue = false;
-            v.y = jumpSpeed;
-        }
 
         // if (isGround) {
         //     v.y = jumpSpeed;
         //     isGround = false;
         // }
 
+
+        rigid.velocity = v;
+    }
+
+    void PlayerJump() {
+        Vector2 v = rigid.velocity;
+
+        if (((isGround && !isGlue) || isWater) && Input.GetKey(KeyCode.Space)) {
+            isGround = false;
+            isGlue = false;
+            v.y = jumpSpeed;
+        }
+
         if (v.y < minSpeed) {
             v.y = minSpeed;
         }
 
         rigid.velocity = v;
+
     }
 
     
@@ -89,7 +102,9 @@ public class Ball : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D collider) {
-        if (collider.gameObject.layer == 9) {
+        if (collider.gameObject.layer == 7) {
+            Restart();
+        } else if (collider.gameObject.layer == 9) {
             // layer number 9 is water.
             isWater = true;
         }
@@ -106,7 +121,7 @@ public class Ball : MonoBehaviour
         Restart();
     }
 
-    void Restart() {
+    public void Restart() {
         rigid.velocity = new Vector2(0, 0);
         this.transform.position = new Vector2(0, 0);
         isGround = false;

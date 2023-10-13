@@ -1,7 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 
 public class Timer : MonoBehaviour
 {
@@ -9,30 +10,36 @@ public class Timer : MonoBehaviour
     public float time = 0;
     private bool isRunning = false;
 
-    public string nextStage = "main";
+    public UnityEvent OnTimerEnd;
 
     void FixedUpdate()
     {
         // 0.02 seconds
-        if (isRunning) {
-            if (time == 0 && nextStage == "main") {
-                SceneManager.LoadScene("Main");
-            } else if (time == 0 && nextStage == "stage") {
-                SceneManager.LoadScene("Stage 3");
+        if (isRunning)
+        {
+            if (time == 0)
+            {
+                OnTimerEnd?.Invoke();
             }
-            time -= 20;
+            else
+            {
+                time -= 20;
+            }
         }
     }
 
-    public void ResetTimer(float timeLimit) {
+    public void ResetTimer(float timeLimit)
+    {
         time = timeLimit;
     }
 
-    public void StartTimer() {
+    public void StartTimer()
+    {
         isRunning = true;
     }
 
-    public void StopTimer() {
+    public void StopTimer()
+    {
         isRunning = false;
     }
 }
